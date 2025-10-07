@@ -11,24 +11,44 @@ import {
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import emailjs from 'emailjs-com';
 
 export const ContactSection = () => {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    setIsSubmitting(true);
+  emailjs
+    .sendForm(
+      'service_wg8q61e',     //  Replace with your Service ID
+      'template_sv1fpci',    // Replace with your Template ID
+       e.target,             //  Sends the form data
+      'keUTR97ypW0LSQyi7'    // Replace with your Public Key
+    )
+    .then(
+      () => {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for your message. I'll get back to you soon.",
+        });
+        e.target.reset();
+        setIsSubmitting(false);
+      },
+      (error) => {
+        toast({
+          title: "Error!",
+          description: "Something went wrong. Please try again.",
+        });
+        console.error('EmailJS error:', error);
+        setIsSubmitting(false);
+      }
+    );
+};
 
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "Thank you for your message. I'll get back to you soon.",
-      });
-      setIsSubmitting(false);
-    }, 1500);
-  };
+
   return (
     <section id="contact" className="py-24 px-4 relative bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
@@ -56,10 +76,10 @@ export const ContactSection = () => {
                 <div>
                   <h4 className="font-medium"> Email</h4>
                   <a
-                    href="mailto:hello@gmail.com"
+                    href="mailto:shushma.bajarangisoft@gmail.com"
                     className="text-muted-foreground hover:text-primary transition-colors"
                   >
-                    hello@gmail.com
+                    shushma.bajarangisoft@gmail.com
                   </a>
                 </div>
               </div>
@@ -70,10 +90,10 @@ export const ContactSection = () => {
                 <div>
                   <h4 className="font-medium"> Phone</h4>
                   <a
-                    href="tel:+11234567890"
+                    href="tel:+91 7483946429"
                     className="text-muted-foreground hover:text-primary transition-colors"
                   >
-                    +1 (123) 456-7890
+                    +91 7483946429
                   </a>
                 </div>
               </div>
@@ -84,7 +104,7 @@ export const ContactSection = () => {
                 <div>
                   <h4 className="font-medium"> Location</h4>
                   <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Vancouver, BC, Canada
+                     Bangalore Karnataka India
                   </a>
                 </div>
               </div>
@@ -130,7 +150,7 @@ export const ContactSection = () => {
                   name="name"
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
-                  placeholder="Pedro Machado..."
+                  placeholder="Your Name..."
                 />
               </div>
 
@@ -148,7 +168,7 @@ export const ContactSection = () => {
                   name="email"
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
-                  placeholder="john@gmail.com"
+                  placeholder="name@gmail.com"
                 />
               </div>
 
